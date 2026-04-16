@@ -222,11 +222,40 @@
       color: var(--text-secondary);
     }
 
+    /* === Rodapé com crédito === */
     .footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
       text-align: center;
-      margin-top: 3rem;
       color: var(--text-secondary);
-      font-size: 0.875rem;
+      font-size: 0.9rem;
+    }
+
+    .created-by {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(59, 130, 246, 0.1);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      transition: all 0.2s;
+    }
+
+    .created-by:hover {
+      background: rgba(59, 130, 246, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .heart {
+      color: #ef4444;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
     }
   </style>
 </head>
@@ -310,13 +339,19 @@
       </div>
     </div>
 
+    <!-- Rodapé com crédito -->
     <div class="footer">
-      Analisador de Lançamentos Contábeis • Versão Melhorada
+      <div class="created-by">
+        <span>Created with ❤️ by</span>
+        <strong>Yan Marques</strong>
+      </div>
+      <p style="margin-top: 12px; font-size: 0.8rem; opacity: 0.7;">
+        Analisador de Lançamentos Contábeis • 2026
+      </p>
     </div>
   </div>
 
   <script>
-    // Ícones Lucide
     lucide.createIcons();
 
     const fmt = v => 'R$ ' + v.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -392,12 +427,14 @@
         }
       }
 
-      // Totais por conta
       const contas = {};
       [...debitos, ...creditos].forEach(item => {
         if (!contas[item.conta]) contas[item.conta] = { deb: 0, cred: 0 };
-        if (debitos.includes(item)) contas[item.conta].deb += item.valor;
-        else contas[item.conta].cred += item.valor;
+        if (debitos.some(d => d === item)) {
+          contas[item.conta].deb += item.valor;
+        } else {
+          contas[item.conta].cred += item.valor;
+        }
       });
 
       return { totalDeb, totalCred, diff, issues, contas };
@@ -430,7 +467,6 @@
 
       lucide.createIcons();
 
-      // Inconsistências
       const detailSection = document.getElementById('detail-section');
       const diffBody = document.getElementById('diff-body');
       diffBody.innerHTML = '';
@@ -451,7 +487,6 @@
         detailSection.style.display = 'none';
       }
 
-      // Totais por conta
       const contaBody = document.getElementById('conta-body');
       contaBody.innerHTML = '';
 
@@ -483,7 +518,6 @@
       reader.readAsText(file, 'latin1');
     }
 
-    // Eventos
     const dropArea = document.getElementById('drop-area');
     const fileInput = document.getElementById('file-input');
 
@@ -492,9 +526,7 @@
       dropArea.classList.add('hover');
     });
 
-    dropArea.addEventListener('dragleave', () => {
-      dropArea.classList.remove('hover');
-    });
+    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('hover'));
 
     dropArea.addEventListener('drop', e => {
       e.preventDefault();
