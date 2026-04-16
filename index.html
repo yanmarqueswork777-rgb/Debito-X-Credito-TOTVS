@@ -27,17 +27,29 @@
       padding: 2rem 1rem;
     }
 
-    .container { max-width: 1100px; margin: 0 auto; }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
 
-    header { text-align: center; margin-bottom: 2.5rem; }
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
     h1 {
       font-size: 2.25rem;
       font-weight: 700;
       background: linear-gradient(90deg, #60a5fa, #a5b4fc);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
     }
-    .subtitle { color: var(--text-secondary); font-size: 1.05rem; }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+    }
 
     #drop-area {
       border: 2px dashed #475569;
@@ -49,10 +61,24 @@
       background: var(--card);
       margin-bottom: 2rem;
     }
+
     #drop-area.hover {
       border-color: var(--primary);
       background: rgba(59, 130, 246, 0.1);
       transform: translateY(-4px);
+    }
+
+    .drop-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .icon-upload {
+      width: 64px;
+      height: 64px;
+      color: var(--primary);
     }
 
     .btn {
@@ -62,15 +88,28 @@
       padding: 12px 28px;
       border-radius: 12px;
       font-weight: 600;
+      font-size: 1rem;
       cursor: pointer;
+      transition: all 0.2s;
       display: inline-flex;
       align-items: center;
       gap: 8px;
     }
-    .btn:hover { background: #2563eb; transform: translateY(-2px); }
 
-    #results { display: none; animation: fadeIn 0.4s ease forwards; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .btn:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+    }
+
+    #results {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     .metric-grid {
       display: grid;
@@ -78,44 +117,64 @@
       gap: 1.25rem;
       margin-bottom: 2rem;
     }
+
     .metric-card {
       background: var(--card);
       border-radius: 16px;
       padding: 1.75rem;
       border: 1px solid var(--border);
+      transition: transform 0.2s;
     }
-    .metric-value { font-size: 2rem; font-weight: 700; }
+
+    .metric-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .metric-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      font-feature-settings: "tnum";
+    }
+
     .metric-value.ok { color: var(--success); }
     .metric-value.err { color: var(--danger); }
 
     .alert {
       padding: 1rem 1.5rem;
       border-radius: 14px;
-      margin-bottom: 1.5rem;
+      font-size: 1rem;
       display: flex;
       align-items: center;
       gap: 12px;
+      margin-bottom: 2rem;
     }
+
     .alert-ok {
       background: rgba(34, 197, 94, 0.15);
       border: 1px solid rgba(34, 197, 94, 0.3);
       color: #86efac;
     }
+
     .alert-err {
       background: rgba(239, 68, 68, 0.15);
       border: 1px solid rgba(239, 68, 68, 0.3);
       color: #fda4af;
     }
-    .alert-warn {
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-      color: #fcd34d;
-    }
 
     .section-title {
       font-size: 1.15rem;
       font-weight: 600;
-      margin: 2rem 0 1rem;
+      margin-bottom: 1rem;
+      color: var(--text);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -129,16 +188,23 @@
       overflow: hidden;
       border: 1px solid var(--border);
     }
+
     th {
       background: #1e2937;
-      padding: 14px 20px;
       text-align: left;
+      padding: 14px 20px;
+      font-weight: 500;
       color: var(--text-secondary);
       font-size: 0.875rem;
     }
+
     td {
       padding: 14px 20px;
       border-top: 1px solid var(--border);
+    }
+
+    .diff-table tr:hover {
+      background: rgba(59, 130, 246, 0.08);
     }
 
     .badge {
@@ -147,18 +213,25 @@
       font-size: 0.75rem;
       font-weight: 600;
     }
+
     .badge-err { background: #7f1d1d; color: #fda4af; }
     .badge-warn { background: #78350f; color: #fcd34d; }
 
-    .hist-text { font-style: italic; color: var(--text-secondary); }
+    .hist-text {
+      font-style: italic;
+      color: var(--text-secondary);
+    }
 
+    /* === Rodapé com crédito === */
     .footer {
       margin-top: 4rem;
       padding-top: 2rem;
       border-top: 1px solid var(--border);
       text-align: center;
       color: var(--text-secondary);
+      font-size: 0.9rem;
     }
+
     .created-by {
       display: inline-flex;
       align-items: center;
@@ -167,28 +240,46 @@
       padding: 8px 16px;
       border-radius: 9999px;
       border: 1px solid rgba(59, 130, 246, 0.2);
+      transition: all 0.2s;
     }
-    .heart { color: #ef4444; animation: pulse 2s infinite; }
-    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+
+    .created-by:hover {
+      background: rgba(59, 130, 246, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .heart {
+      color: #ef4444;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <h1>Analisador Débito × Crédito</h1>
-      <p class="subtitle">Verificação inteligente de lançamentos contábeis</p>
+      <p class="subtitle">Verificação inteligente de contabilização off-line</p>
     </header>
 
     <div id="drop-area">
       <div class="drop-content">
-        <i data-lucide="upload-cloud" style="width:64px;height:64px;color:#3b82f6"></i>
-        <p style="font-size:1.25rem;font-weight:600;margin-bottom:8px">Arraste o arquivo aqui ou</p>
+        <i data-lucide="upload-cloud" class="icon-upload"></i>
+        <div>
+          <p style="font-size: 1.25rem; font-weight: 600; margin-bottom: 4px;">Arraste seu arquivo aqui</p>
+          <p style="color: var(--text-secondary);">ou</p>
+        </div>
         <button class="btn" onclick="document.getElementById('file-input').click()">
-          <i data-lucide="file-text"></i> Escolher arquivo CSV/TXT
+          <i data-lucide="file-text"></i>
+          Escolher arquivo CSV/TXT
         </button>
         <input type="file" id="file-input" accept=".csv,.txt" style="display:none;">
-        <p style="margin-top:1rem;color:var(--text-secondary);font-size:0.9rem">
-          Formato: Contabilização Off Line (separado por ;)
+        <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 1rem;">
+          Formato: Contabilização Off Line (separado por ponto-e-vírgula)
         </p>
       </div>
     </div>
@@ -210,10 +301,12 @@
       </div>
 
       <div id="status-box"></div>
-      <div id="quality-alerts"></div>
 
-      <div id="detail-section" style="display:none;">
-        <div class="section-title"><i data-lucide="alert-triangle"></i> Inconsistências de Pareamento</div>
+      <div id="detail-section" style="display:none; margin-bottom: 2.5rem;">
+        <div class="section-title">
+          <i data-lucide="alert-triangle"></i>
+          Inconsistências encontradas
+        </div>
         <table class="diff-table">
           <thead>
             <tr>
@@ -228,7 +321,10 @@
       </div>
 
       <div>
-        <div class="section-title"><i data-lucide="table"></i> Totais por Conta Contábil</div>
+        <div class="section-title">
+          <i data-lucide="table"></i>
+          Totais por Conta Contábil
+        </div>
         <table class="diff-table">
           <thead>
             <tr>
@@ -243,14 +339,14 @@
       </div>
     </div>
 
+    <!-- Rodapé com crédito -->
     <div class="footer">
       <div class="created-by">
-        <span>Created with</span> 
-        <span class="heart">❤️</span> 
-        <strong>by Yan Marques</strong>
+        <span>Created with ❤️ by</span>
+        <strong>Yan Marques</strong>
       </div>
-      <p style="margin-top: 12px; font-size: 0.85rem; opacity: 0.7;">
-        Analisador de Lançamentos Contábeis
+      <p style="margin-top: 12px; font-size: 0.8rem; opacity: 0.7;">
+        Analisador de Lançamentos Contábeis • 2026
       </p>
     </div>
   </div>
@@ -264,62 +360,28 @@
       const lines = text.split(/\r?\n/);
       const debitos = [];
       const creditos = [];
-      const qualityIssues = [];
 
       for (let i = 0; i < lines.length; i++) {
         const cols = lines[i].split(';');
         if (cols.length < 5) continue;
 
-        const linha = (cols[0] || '').trim() || (i + 1);
-        const tipoRaw = (cols[1] || '').trim();
-        const tipo = tipoRaw.toLowerCase();
+        const tipo = (cols[1] || '').trim().toLowerCase();
         const ctaDeb = (cols[2] || '').trim();
         const ctaCred = (cols[3] || '').trim();
         const valorRaw = (cols[4] || '').trim().replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, '');
         const hist = (cols[6] || '').trim();
         const valor = parseFloat(valorRaw);
-
-        const isDebito = tipo.startsWith('debito');
-        const isCredito = tipo.startsWith('credito');
-
-        // ==================== ALERTAS DE QUALIDADE ====================
-        if ((isDebito || isCredito)) {
-          if (isNaN(valor) || valor === 0 || valorRaw === '') {
-            qualityIssues.push({
-              linha,
-              tipo: tipoRaw || '—',
-              problema: 'Tipo marcado sem valor',
-              descricao: `Linha ${linha}: ${tipoRaw} informado mas sem valor`
-            });
-          }
-          if (isDebito && !ctaDeb) {
-            qualityIssues.push({
-              linha,
-              tipo: tipoRaw || '—',
-              problema: 'Débito sem conta',
-              descricao: `Linha ${linha}: Débito sem conta contábil`
-            });
-          }
-          if (isCredito && !ctaCred) {
-            qualityIssues.push({
-              linha,
-              tipo: tipoRaw || '—',
-              problema: 'Crédito sem conta',
-              descricao: `Linha ${linha}: Crédito sem conta contábil`
-            });
-          }
-        }
-        // ============================================================
+        const linha = (cols[0] || '').trim() || (i+1);
 
         if (isNaN(valor) || valor === 0) continue;
 
-        if (isDebito && ctaDeb) {
+        if (tipo.startsWith('debito') && ctaDeb) {
           debitos.push({ linha, conta: ctaDeb, valor, hist });
-        } else if (isCredito && ctaCred) {
+        } else if (tipo.startsWith('credito') && ctaCred) {
           creditos.push({ linha, conta: ctaCred, valor, hist });
         }
       }
-      return { debitos, creditos, qualityIssues };
+      return { debitos, creditos };
     }
 
     function analisar(debitos, creditos) {
@@ -336,6 +398,7 @@
         if (!debMap[k]) debMap[k] = [];
         debMap[k].push(d);
       });
+
       creditos.forEach(c => {
         const k = c.valor.toFixed(2);
         if (!credMap[k]) credMap[k] = [];
@@ -343,9 +406,11 @@
       });
 
       const allVals = new Set([...Object.keys(debMap), ...Object.keys(credMap)]);
+
       for (const v of allVals) {
         const dc = (debMap[v] || []).length;
         const cc = (credMap[v] || []).length;
+
         if (dc !== cc) {
           const val = parseFloat(v);
           if (dc > cc) {
@@ -375,11 +440,12 @@
       return { totalDeb, totalCred, diff, issues, contas };
     }
 
-    function render({ totalDeb, totalCred, diff, issues, contas }, qualityIssues) {
+    function render({ totalDeb, totalCred, diff, issues, contas }) {
       document.getElementById('results').style.display = 'block';
 
       document.getElementById('total-deb').textContent = fmt(totalDeb);
       document.getElementById('total-cred').textContent = fmt(totalCred);
+
       const diffEl = document.getElementById('total-diff');
       diffEl.textContent = fmt(diff);
       diffEl.className = `metric-value ${diff < 0.01 ? 'ok' : 'err'}`;
@@ -395,31 +461,16 @@
         statusBox.innerHTML = `
           <div class="alert alert-err">
             <i data-lucide="alert-triangle" style="width:24px;height:24px"></i>
-            <div>Diferença de <strong>${fmt(diff)}</strong> encontrada.</div>
+            <div>Diferença de <strong>${fmt(diff)}</strong> encontrada entre débitos e créditos.</div>
           </div>`;
-      }
-
-      // Alertas de Qualidade (a parte nova que você pediu)
-      const qaBox = document.getElementById('quality-alerts');
-      if (qualityIssues.length > 0) {
-        qaBox.style.display = 'block';
-        let html = `<div class="section-title"><i data-lucide="alert-circle"></i> Alertas de Qualidade (${qualityIssues.length})</div>`;
-        html += `<div class="alert alert-warn">`;
-        qualityIssues.forEach(iss => {
-          html += `<div style="margin: 6px 0;">• <strong>Linha ${iss.linha}</strong>: ${iss.problema} — ${iss.descricao}</div>`;
-        });
-        html += `</div>`;
-        qaBox.innerHTML = html;
-      } else {
-        qaBox.style.display = 'none';
       }
 
       lucide.createIcons();
 
-      // Inconsistências de pareamento
       const detailSection = document.getElementById('detail-section');
       const diffBody = document.getElementById('diff-body');
       diffBody.innerHTML = '';
+
       if (issues.length > 0) {
         detailSection.style.display = 'block';
         issues.forEach(iss => {
@@ -436,41 +487,47 @@
         detailSection.style.display = 'none';
       }
 
-      // Totais por conta
       const contaBody = document.getElementById('conta-body');
       contaBody.innerHTML = '';
-      Object.entries(contas).sort((a,b) => a[0].localeCompare(b[0])).forEach(([conta, v]) => {
-        const saldo = v.deb - v.cred;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td style="font-weight:600">${conta}</td>
-          <td style="text-align:right">${fmt(v.deb)}</td>
-          <td style="text-align:right">${fmt(v.cred)}</td>
-          <td style="text-align:right;font-weight:600;color:${Math.abs(saldo)>0.01 ? 'var(--danger)' : 'var(--success)'}">
-            ${fmt(saldo)}
-          </td>
-        `;
-        contaBody.appendChild(tr);
-      });
+
+      Object.entries(contas)
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .forEach(([conta, v]) => {
+          const saldo = v.deb - v.cred;
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="font-weight:600">${conta}</td>
+            <td style="text-align:right">${fmt(v.deb)}</td>
+            <td style="text-align:right">${fmt(v.cred)}</td>
+            <td style="text-align:right; font-weight:600; color:${Math.abs(saldo) > 0.01 ? 'var(--danger)' : 'var(--success)'}">
+              ${fmt(saldo)}
+            </td>
+          `;
+          contaBody.appendChild(tr);
+        });
     }
 
     function processFile(file) {
       const reader = new FileReader();
       reader.onload = e => {
         const text = e.target.result;
-        const { debitos, creditos, qualityIssues } = parseCsv(text);
+        const { debitos, creditos } = parseCsv(text);
         const result = analisar(debitos, creditos);
-        render(result, qualityIssues);
+        render(result);
       };
       reader.readAsText(file, 'latin1');
     }
 
-    // Drag and Drop + File Input
     const dropArea = document.getElementById('drop-area');
     const fileInput = document.getElementById('file-input');
 
-    dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.classList.add('hover'); });
+    dropArea.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropArea.classList.add('hover');
+    });
+
     dropArea.addEventListener('dragleave', () => dropArea.classList.remove('hover'));
+
     dropArea.addEventListener('drop', e => {
       e.preventDefault();
       dropArea.classList.remove('hover');
