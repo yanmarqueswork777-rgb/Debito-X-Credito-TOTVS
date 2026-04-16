@@ -49,7 +49,11 @@
       background: var(--card);
       margin-bottom: 2rem;
     }
-    #drop-area.hover { border-color: var(--primary); background: rgba(59, 130, 246, 0.1); transform: translateY(-4px); }
+    #drop-area.hover {
+      border-color: var(--primary);
+      background: rgba(59, 130, 246, 0.1);
+      transform: translateY(-4px);
+    }
 
     .btn {
       background: var(--primary);
@@ -92,6 +96,16 @@
       align-items: center;
       gap: 12px;
     }
+    .alert-ok {
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #86efac;
+    }
+    .alert-err {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fda4af;
+    }
     .alert-warn {
       background: rgba(245, 158, 11, 0.15);
       border: 1px solid rgba(245, 158, 11, 0.3);
@@ -107,13 +121,36 @@
       gap: 8px;
     }
 
-    table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
-    th { background: #1e2937; padding: 14px 20px; text-align: left; color: var(--text-secondary); }
-    td { padding: 14px 20px; border-top: 1px solid var(--border); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    th {
+      background: #1e2937;
+      padding: 14px 20px;
+      text-align: left;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+    td {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+    }
 
-    .badge { padding: 4px 12px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+    .badge {
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
     .badge-err { background: #7f1d1d; color: #fda4af; }
     .badge-warn { background: #78350f; color: #fcd34d; }
+
+    .hist-text { font-style: italic; color: var(--text-secondary); }
 
     .footer {
       margin-top: 4rem;
@@ -132,7 +169,7 @@
       border: 1px solid rgba(59, 130, 246, 0.2);
     }
     .heart { color: #ef4444; animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
   </style>
 </head>
 <body>
@@ -145,7 +182,7 @@
     <div id="drop-area">
       <div class="drop-content">
         <i data-lucide="upload-cloud" style="width:64px;height:64px;color:#3b82f6"></i>
-        <p style="font-size:1.25rem;font-weight:600">Arraste o arquivo aqui ou</p>
+        <p style="font-size:1.25rem;font-weight:600;margin-bottom:8px">Arraste o arquivo aqui ou</p>
         <button class="btn" onclick="document.getElementById('file-input').click()">
           <i data-lucide="file-text"></i> Escolher arquivo CSV/TXT
         </button>
@@ -158,25 +195,49 @@
 
     <div id="results">
       <div class="metric-grid">
-        <div class="metric-card"><div class="metric-label">Total Débito</div><div class="metric-value" id="total-deb">—</div></div>
-        <div class="metric-card"><div class="metric-label">Total Crédito</div><div class="metric-value" id="total-cred">—</div></div>
-        <div class="metric-card"><div class="metric-label">Diferença</div><div class="metric-value" id="total-diff">—</div></div>
+        <div class="metric-card">
+          <div class="metric-label"><i data-lucide="arrow-down-circle"></i> Total Débito</div>
+          <div class="metric-value" id="total-deb">—</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label"><i data-lucide="arrow-up-circle"></i> Total Crédito</div>
+          <div class="metric-value" id="total-cred">—</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label"><i data-lucide="scale"></i> Diferença</div>
+          <div class="metric-value" id="total-diff">—</div>
+        </div>
       </div>
 
       <div id="status-box"></div>
-      <div id="quality-alerts" style="display:none;"></div>
+      <div id="quality-alerts"></div>
 
-      <!-- Inconsistências de pareamento -->
       <div id="detail-section" style="display:none;">
         <div class="section-title"><i data-lucide="alert-triangle"></i> Inconsistências de Pareamento</div>
-        <table class="diff-table"><thead><tr><th>Tipo</th><th>Valor</th><th>Histórico</th><th>Descrição</th></tr></thead><tbody id="diff-body"></tbody></table>
+        <table class="diff-table">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Valor</th>
+              <th>Histórico</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody id="diff-body"></tbody>
+        </table>
       </div>
 
-      <!-- Totais por conta -->
       <div>
         <div class="section-title"><i data-lucide="table"></i> Totais por Conta Contábil</div>
         <table class="diff-table">
-          <thead><tr><th>Conta</th><th style="text-align:right">Débitos</th><th style="text-align:right">Créditos</th><th style="text-align:right">Saldo</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Conta</th>
+              <th style="text-align:right">Débitos</th>
+              <th style="text-align:right">Créditos</th>
+              <th style="text-align:right">Saldo</th>
+            </tr>
+          </thead>
           <tbody id="conta-body"></tbody>
         </table>
       </div>
@@ -184,8 +245,13 @@
 
     <div class="footer">
       <div class="created-by">
-        <span>Created with</span> <span class="heart">❤️</span> <strong>by Yan Marques</strong>
+        <span>Created with</span> 
+        <span class="heart">❤️</span> 
+        <strong>by Yan Marques</strong>
       </div>
+      <p style="margin-top: 12px; font-size: 0.85rem; opacity: 0.7;">
+        Analisador de Lançamentos Contábeis
+      </p>
     </div>
   </div>
 
@@ -196,13 +262,15 @@
 
     function parseCsv(text) {
       const lines = text.split(/\r?\n/);
-      const debitos = [], creditos = [], qualityIssues = [];
+      const debitos = [];
+      const creditos = [];
+      const qualityIssues = [];
 
       for (let i = 0; i < lines.length; i++) {
         const cols = lines[i].split(';');
         if (cols.length < 5) continue;
 
-        const linha = (cols[0] || '').trim() || (i+1);
+        const linha = (cols[0] || '').trim() || (i + 1);
         const tipoRaw = (cols[1] || '').trim();
         const tipo = tipoRaw.toLowerCase();
         const ctaDeb = (cols[2] || '').trim();
@@ -214,31 +282,34 @@
         const isDebito = tipo.startsWith('debito');
         const isCredito = tipo.startsWith('credito');
 
-        // === NOVO: Detecção de problemas de qualidade ===
-        if ((isDebito || isCredito) && (isNaN(valor) || valor === 0)) {
-          qualityIssues.push({
-            linha,
-            tipo: tipoRaw || '—',
-            problema: 'Tipo marcado mas valor vazio ou zero',
-            descricao: `Linha ${linha}: ${tipoRaw} sem valor`
-          });
+        // ==================== ALERTAS DE QUALIDADE ====================
+        if ((isDebito || isCredito)) {
+          if (isNaN(valor) || valor === 0 || valorRaw === '') {
+            qualityIssues.push({
+              linha,
+              tipo: tipoRaw || '—',
+              problema: 'Tipo marcado sem valor',
+              descricao: `Linha ${linha}: ${tipoRaw} informado mas sem valor`
+            });
+          }
+          if (isDebito && !ctaDeb) {
+            qualityIssues.push({
+              linha,
+              tipo: tipoRaw || '—',
+              problema: 'Débito sem conta',
+              descricao: `Linha ${linha}: Débito sem conta contábil`
+            });
+          }
+          if (isCredito && !ctaCred) {
+            qualityIssues.push({
+              linha,
+              tipo: tipoRaw || '—',
+              problema: 'Crédito sem conta',
+              descricao: `Linha ${linha}: Crédito sem conta contábil`
+            });
+          }
         }
-        if (isDebito && !ctaDeb) {
-          qualityIssues.push({
-            linha,
-            tipo: tipoRaw || '—',
-            problema: 'Débito sem conta',
-            descricao: `Linha ${linha}: Débito sem conta contábil`
-          });
-        }
-        if (isCredito && !ctaCred) {
-          qualityIssues.push({
-            linha,
-            tipo: tipoRaw || '—',
-            problema: 'Crédito sem conta',
-            descricao: `Linha ${linha}: Crédito sem conta contábil`
-          });
-        }
+        // ============================================================
 
         if (isNaN(valor) || valor === 0) continue;
 
@@ -251,54 +322,91 @@
       return { debitos, creditos, qualityIssues };
     }
 
-    // ... (o resto das funções analisar e render permanecem iguais, só adicionei a parte de qualityIssues)
-
     function analisar(debitos, creditos) {
-      // ... mesmo código anterior (totalDeb, totalCred, issues de pareamento, contas)
       const totalDeb = debitos.reduce((s, x) => s + x.valor, 0);
       const totalCred = creditos.reduce((s, x) => s + x.valor, 0);
       const diff = Math.abs(totalDeb - totalCred);
 
-      // issues de pareamento (mantido igual)
       const issues = [];
-      // ... (código de debMap / credMap igual ao anterior)
+      const debMap = {};
+      const credMap = {};
+
+      debitos.forEach(d => {
+        const k = d.valor.toFixed(2);
+        if (!debMap[k]) debMap[k] = [];
+        debMap[k].push(d);
+      });
+      creditos.forEach(c => {
+        const k = c.valor.toFixed(2);
+        if (!credMap[k]) credMap[k] = [];
+        credMap[k].push(c);
+      });
+
+      const allVals = new Set([...Object.keys(debMap), ...Object.keys(credMap)]);
+      for (const v of allVals) {
+        const dc = (debMap[v] || []).length;
+        const cc = (credMap[v] || []).length;
+        if (dc !== cc) {
+          const val = parseFloat(v);
+          if (dc > cc) {
+            for (let i = cc; i < dc; i++) {
+              const d = debMap[v][i];
+              issues.push({ tipo: 'Débito sem crédito', valor: val, hist: d.hist, linha: d.linha, badge: 'err' });
+            }
+          } else {
+            for (let i = dc; i < cc; i++) {
+              const c = credMap[v][i];
+              issues.push({ tipo: 'Crédito sem débito', valor: val, hist: c.hist, linha: c.linha, badge: 'warn' });
+            }
+          }
+        }
+      }
 
       const contas = {};
       [...debitos, ...creditos].forEach(item => {
         if (!contas[item.conta]) contas[item.conta] = { deb: 0, cred: 0 };
-        if (debitos.some(d => d === item)) contas[item.conta].deb += item.valor;
-        else contas[item.conta].cred += item.valor;
+        if (debitos.some(d => d === item)) {
+          contas[item.conta].deb += item.valor;
+        } else {
+          contas[item.conta].cred += item.valor;
+        }
       });
 
       return { totalDeb, totalCred, diff, issues, contas };
     }
 
-    function render(result, qualityIssues) {
+    function render({ totalDeb, totalCred, diff, issues, contas }, qualityIssues) {
       document.getElementById('results').style.display = 'block';
 
-      // métricas principais (igual)
-      document.getElementById('total-deb').textContent = fmt(result.totalDeb);
-      document.getElementById('total-cred').textContent = fmt(result.totalCred);
+      document.getElementById('total-deb').textContent = fmt(totalDeb);
+      document.getElementById('total-cred').textContent = fmt(totalCred);
       const diffEl = document.getElementById('total-diff');
-      diffEl.textContent = fmt(result.diff);
-      diffEl.className = `metric-value ${result.diff < 0.01 ? 'ok' : 'err'}`;
+      diffEl.textContent = fmt(diff);
+      diffEl.className = `metric-value ${diff < 0.01 ? 'ok' : 'err'}`;
 
-      // Status principal
       const statusBox = document.getElementById('status-box');
-      if (result.diff < 0.01) {
-        statusBox.innerHTML = `<div class="alert alert-ok"><i data-lucide="check-circle"></i><div><strong>Equilibrado!</strong> Débitos e créditos batem.</div></div>`;
+      if (diff < 0.01) {
+        statusBox.innerHTML = `
+          <div class="alert alert-ok">
+            <i data-lucide="check-circle" style="width:24px;height:24px"></i>
+            <div><strong>Tudo equilibrado!</strong> Débitos e créditos batem perfeitamente.</div>
+          </div>`;
       } else {
-        statusBox.innerHTML = `<div class="alert alert-err"><i data-lucide="alert-triangle"></i><div>Diferença de <strong>${fmt(result.diff)}</strong> encontrada.</div></div>`;
+        statusBox.innerHTML = `
+          <div class="alert alert-err">
+            <i data-lucide="alert-triangle" style="width:24px;height:24px"></i>
+            <div>Diferença de <strong>${fmt(diff)}</strong> encontrada.</div>
+          </div>`;
       }
 
-      // === NOVO: Alertas de Qualidade ===
+      // Alertas de Qualidade (a parte nova que você pediu)
       const qaBox = document.getElementById('quality-alerts');
       if (qualityIssues.length > 0) {
         qaBox.style.display = 'block';
         let html = `<div class="section-title"><i data-lucide="alert-circle"></i> Alertas de Qualidade (${qualityIssues.length})</div>`;
         html += `<div class="alert alert-warn">`;
         qualityIssues.forEach(iss => {
-          html += `<div style="margin-bottom:8px">• Linha ${iss.linha}: <strong>${iss.problema}</strong> — ${iss.descricao}</div>`;
+          html += `<div style="margin: 6px 0;">• <strong>Linha ${iss.linha}</strong>: ${iss.problema} — ${iss.descricao}</div>`;
         });
         html += `</div>`;
         qaBox.innerHTML = html;
@@ -308,13 +416,70 @@
 
       lucide.createIcons();
 
-      // resto do render (inconsistências e tabela de contas) igual ao anterior...
-      // (copie as partes de detail-section e conta-body do código anterior)
+      // Inconsistências de pareamento
+      const detailSection = document.getElementById('detail-section');
+      const diffBody = document.getElementById('diff-body');
+      diffBody.innerHTML = '';
+      if (issues.length > 0) {
+        detailSection.style.display = 'block';
+        issues.forEach(iss => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><span class="badge badge-${iss.badge}">${iss.tipo}</span></td>
+            <td style="font-weight:600">${fmt(iss.valor)}</td>
+            <td class="hist-text">${iss.hist || '—'}</td>
+            <td style="color:var(--text-secondary)">Linha ${iss.linha}</td>
+          `;
+          diffBody.appendChild(tr);
+        });
+      } else {
+        detailSection.style.display = 'none';
+      }
+
+      // Totais por conta
+      const contaBody = document.getElementById('conta-body');
+      contaBody.innerHTML = '';
+      Object.entries(contas).sort((a,b) => a[0].localeCompare(b[0])).forEach(([conta, v]) => {
+        const saldo = v.deb - v.cred;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight:600">${conta}</td>
+          <td style="text-align:right">${fmt(v.deb)}</td>
+          <td style="text-align:right">${fmt(v.cred)}</td>
+          <td style="text-align:right;font-weight:600;color:${Math.abs(saldo)>0.01 ? 'var(--danger)' : 'var(--success)'}">
+            ${fmt(saldo)}
+          </td>
+        `;
+        contaBody.appendChild(tr);
+      });
     }
 
-    // Eventos de drag & drop e file input (mesmo de antes)
-    // ... (mantenha igual)
+    function processFile(file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const text = e.target.result;
+        const { debitos, creditos, qualityIssues } = parseCsv(text);
+        const result = analisar(debitos, creditos);
+        render(result, qualityIssues);
+      };
+      reader.readAsText(file, 'latin1');
+    }
 
+    // Drag and Drop + File Input
+    const dropArea = document.getElementById('drop-area');
+    const fileInput = document.getElementById('file-input');
+
+    dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.classList.add('hover'); });
+    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('hover'));
+    dropArea.addEventListener('drop', e => {
+      e.preventDefault();
+      dropArea.classList.remove('hover');
+      if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]);
+    });
+
+    fileInput.addEventListener('change', e => {
+      if (e.target.files[0]) processFile(e.target.files[0]);
+    });
   </script>
 </body>
 </html>
