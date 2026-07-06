@@ -222,6 +222,22 @@
       color: var(--text-secondary);
     }
 
+    .conta-desc {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .desc-status {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .desc-status.err { color: var(--warning); }
+
     /* === Rodapé com crédito === */
     .footer {
       margin-top: 4rem;
@@ -325,10 +341,12 @@
           <i data-lucide="table"></i>
           Totais por Conta Contábil
         </div>
+        <div class="desc-status" id="desc-status"></div>
         <table class="diff-table">
           <thead>
             <tr>
               <th>Conta</th>
+              <th>Descrição</th>
               <th style="text-align:right">Débitos</th>
               <th style="text-align:right">Créditos</th>
               <th style="text-align:right">Saldo</th>
@@ -355,6 +373,74 @@
     lucide.createIcons();
 
     const fmt = v => 'R$ ' + v.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    // === Mapa de descrições de contas (mini banco de dados do usuário) ===
+    const CONTAS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTToYpj0jF5oq726nu4_NAxgU3Yf6z27IP0UEnSRmOnFN9c8wVvebg4uh3a5IhMbYa9rNuh7sTnLCgP/pub?gid=2084678225&single=true&output=csv';
+    let contaDescMap = {};
+    let contasCarregadas = false;
+
+    // Parser CSV simples com suporte a campos entre aspas
+    function parseCsvLine(line) {
+      const result = [];
+      let cur = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (inQuotes) {
+          if (ch === '"') {
+            if (line[i + 1] === '"') { cur += '"'; i++; }
+            else { inQuotes = false; }
+          } else {
+            cur += ch;
+          }
+        } else {
+          if (ch === '"') inQuotes = true;
+          else if (ch === ',') { result.push(cur); cur = ''; }
+          else cur += ch;
+        }
+      }
+      result.push(cur);
+      return result;
+    }
+
+    async function carregarDescricoesContas() {
+      const statusEl = document.getElementById('desc-status');
+      try {
+        const resp = await fetch(CONTAS_CSV_URL);
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const text = await resp.text();
+        const lines = text.split(/\r?\n/);
+        // primeira linha é cabeçalho: Cod Conta, Desc Moeda 1, ...
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i];
+          if (!line.trim()) continue;
+          const cols = parseCsvLine(line);
+          const cod = (cols[0] || '').trim();
+          const desc = (cols[1] || '').trim();
+          if (cod) contaDescMap[cod] = desc;
+        }
+        contasCarregadas = true;
+        if (statusEl) statusEl.innerHTML = '';
+      } catch (err) {
+        console.error('Erro ao carregar descrições de contas:', err);
+        if (statusEl) {
+          statusEl.classList.add('err');
+          statusEl.innerHTML = '<i data-lucide="alert-circle"></i> Não foi possível carregar as descrições das contas (planilha indisponível).';
+          lucide.createIcons();
+        }
+      }
+    }
+
+    // Busca descrição por número de conta, tentando também sem zeros à esquerda
+    function getContaDesc(conta) {
+      if (!conta) return '';
+      if (contaDescMap[conta]) return contaDescMap[conta];
+      const semZeros = conta.replace(/^0+/, '');
+      if (contaDescMap[semZeros]) return contaDescMap[semZeros];
+      return '';
+    }
+
+    carregarDescricoesContas();
 
     function parseCsv(text) {
       const lines = text.split(/\r?\n/);
@@ -494,9 +580,11 @@
         .sort((a, b) => a[0].localeCompare(b[0]))
         .forEach(([conta, v]) => {
           const saldo = v.deb - v.cred;
+          const desc = getContaDesc(conta);
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td style="font-weight:600">${conta}</td>
+            <td class="conta-desc">${desc || '—'}</td>
             <td style="text-align:right">${fmt(v.deb)}</td>
             <td style="text-align:right">${fmt(v.cred)}</td>
             <td style="text-align:right; font-weight:600; color:${Math.abs(saldo) > 0.01 ? 'var(--danger)' : 'var(--success)'}">
